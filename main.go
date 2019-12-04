@@ -1,27 +1,28 @@
-package main // import "github.com/inCaller/prometheus_bot"
+package main
 
 import (
 	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"golang.org/x/net/proxy"
+	"gopkg.in/telegram-bot-api.v4"
+	"gopkg.in/yaml.v2"
+	"html/template"
 	"io"
 	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
+	"net/url"
+	"os"
 	"path"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
-	"gopkg.in/telegram-bot-api.v4"
-	"gopkg.in/yaml.v2"
-
-	"html/template"
 )
 
 type Alerts struct {
@@ -379,6 +380,26 @@ func SplitString(s string, n int) []string {
 func main() {
 	flag.Parse()
 
+	socks5 := os.Getenv("Proxy_Url")
+	username := os.Getenv("Proxy_Username")
+	password := os.Getenv("Proxy_Password")
+	client := &http.Client{}
+	if len(socks5) > 0 {
+		tgProxyURL, err := url.Parse(socks5)
+		tgProxyURL.User = url.UserPassword(username, password)
+		if err != nil {
+			log.Fatalf("Failed to parse proxy URL:%s\n", err)
+		}
+		tgDialer, err := proxy.FromURL(tgProxyURL, proxy.Direct)
+		if err != nil {
+			log.Fatalf("Failed to obtain proxy dialer: %s\n", err)
+		}
+		tgTransport := &http.Transport{
+			Dial: tgDialer.Dial,
+		}
+		client.Transport = tgTransport
+	}
+
 	content, err := ioutil.ReadFile(*config_path)
 	if err != nil {
 		log.Fatalf("Problem reading configuration file: %v", err)
@@ -396,7 +417,7 @@ func main() {
 		cfg.SplitMessageBytes = 4000
 	}
 
-	bot_tmp, err := tgbotapi.NewBotAPI(cfg.TelegramToken)
+	bot_tmp, err := tgbotapi.NewBotAPIWithClient(cfg.TelegramToken, client)
 	if err != nil {
 		log.Fatal(err)
 	}
