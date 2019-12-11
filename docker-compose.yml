@@ -14,9 +14,9 @@ services:
       - Proxy_Username=none
       - Proxy_Password=none
     volumes:
-      - ./config.yaml:/config
-      - ./default.tmpl:/config
+      - ./config/:/config
     command:
       - '/prometheus_bot'
       - '-c=/config/config.yaml'
+      - '-t=/config/default.tmpl'
     restart: always
