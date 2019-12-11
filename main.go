@@ -387,10 +387,10 @@ func main() {
 	if len(socks5) > 0 {
 		tgProxyURL, err := url.Parse(socks5)
 
-		if username!=nil && password!=nil {
+		if username!="" && password!="" {
 			tgProxyURL.User = url.UserPassword(username, password)
 		}
-		
+
 		if err != nil {
 			log.Fatalf("Failed to parse proxy URL:%s\n", err)
 		}
