@@ -3,11 +3,11 @@ version: '3.0'
 services:
 
   alertmanager_bot:
-    image: registry.astralnalog.ru/library/prometheus_bot 
+    image: vortland/prometheus_bot
     environment:
-      - Proxy_Url=none
-      - Proxy_Username=none
-      - Proxy_Password=none
+      - PROXY_URL=
+      - PROXY_USERNAME=
+      - PROXY_PASSWORD=
     volumes:
       - ./config/:/config
     command:
@@ -15,3 +15,5 @@ services:
       - '-c=/config/config.yaml'
       - '-t=/config/default.tmpl'
     restart: always
+    ports: 
+      - 9087:9087

@@ -380,9 +380,9 @@ func SplitString(s string, n int) []string {
 func main() {
 	flag.Parse()
 
-	socks5 := os.Getenv("Proxy_Url")
-	username := os.Getenv("Proxy_Username")
-	password := os.Getenv("Proxy_Password")
+	socks5 := os.Getenv("PROXY_URL")
+	username := os.Getenv("PROXY_USERNAME")
+	password := os.Getenv("PROXY_PASSWORD")
 	client := &http.Client{}
 	if len(socks5) > 0 {
 		tgProxyURL, err := url.Parse(socks5)
