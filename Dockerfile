@@ -13,8 +13,5 @@ COPY --from=builder /prometheus_bot/prometheus_bot /
 RUN apk add --no-cache ca-certificates tzdata tini
 USER nobody
 EXPOSE 9087
-ENV Proxy_Url=none
-ENV Proxy_Username=none
-ENV Proxy_Password=none
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/prometheus_bot"]

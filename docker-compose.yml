@@ -1,10 +1,5 @@
 version: '3.0'
 
-volumes:
-    prometheus_data: {}
-    grafana_data: {}
-    alertmanager_data: {}
-
 services:
 
   alertmanager_bot:
