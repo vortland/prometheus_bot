@@ -1,0 +1,22 @@
+version: '3.0'
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+    alertmanager_data: {}
+
+services:
+
+  alertmanager_bot:
+    image: registry.astralnalog.ru/library/prometheus_bot 
+    environment:
+      - Proxy_Url=none
+      - Proxy_Username=none
+      - Proxy_Password=none
+    volumes:
+      - ./config.yaml:/prometheus_bot
+      - ./default.tmpl:/prometheus_bot
+    command:
+      - '/prometheus_bot'
+      - '-c=/prometheus_bot/config.yaml'
+    restart: always

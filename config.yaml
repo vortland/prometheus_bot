@@ -1,0 +1,5 @@
+telegram_token: "token goes here"
+# ONLY IF YOU USING TEMPLATE required for test
+
+template_path: "default.tmpl" 
+time_zone: "Europe/Moscow"
