@@ -17,4 +17,4 @@ ENV PROXY_URL=
 ENV PROXY_USERNAME=
 ENV PROXY_PASSWORD=
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/prometheus_bot"]
+CMD ["/prometheus_bot -c=/config/config.yaml -t=/config/default.tmpl"]
