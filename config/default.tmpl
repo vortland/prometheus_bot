@@ -1,4 +1,3 @@
-<b>Scada UUID:</b>{{ index .CommonLabels "scada_uuid"}}
 {{ $length := len .GroupLabels -}} {{ if ne $length 0 }}
 <b>Grouped for:</b>
 {{ range $key,$val := .GroupLabels -}}
@@ -15,14 +14,7 @@ Status: <b>{{.Status | str_UpperCase}} ✅</b>
 {{end }}
 <b>Active Alert List:</b>
 {{- range $val := .Alerts }}
-  Alert: <a href="{{ $val.GeneratorURL }}">{{ index $val.Annotations "name" }}</a>
-  Current value:{{if HasKey $val.Annotations "measureUnit" -}}
-  {{str_Format_MeasureUnit (index $val.Annotations "measureUnit") (index $val.Annotations "value")}}
-  {{else -}}
-  {{if HasKey $val.Annotations "value" -}} 
-  {{ index $val.Annotations "value" | str_FormatFloat}}
-  {{end -}}
-  {{end -}}
+  Alert: <b>{{ $val.Labels.alertname }}</b>
   {{$severity := index $val.Labels "severity" -}}
   {{if eq $severity "Warning" -}}
   Severity: {{$severity}} ⚠️
@@ -31,10 +23,9 @@ Status: <b>{{.Status | str_UpperCase}} ✅</b>
   {{else -}}
   Severity: {{$severity}}
   {{ end -}}
+  Message: {{ $val.Annotations.message }}
+  Summary: {{ $val.Annotations.summary }}
   Active from: {{ $val.StartsAt | str_FormatDate }}
   {{ range $key, $value := $val.Annotations -}}
-  {{ if and (and (ne $key "name") (ne $key "value")) (ne $key "measureUnit") }}
-  {{$key}}: {{$value}}
-  {{- end -}}
 {{- end -}}
 {{- end -}}
