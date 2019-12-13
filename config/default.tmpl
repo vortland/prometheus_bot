@@ -23,8 +23,24 @@ Status: <b>{{.Status | str_UpperCase}} ✅</b>
   {{else -}}
   Severity: {{$severity}}
   {{ end -}}
-  Message: {{ $val.Annotations.message }}
-  Summary: {{ $val.Annotations.summary }}
+  {{if HasKey $val.Annotations "message" -}} 
+  Message:{{ $val.Annotations.message }}
+  {{end -}}
+  {{if HasKey $val.Annotations "summary" -}} 
+  Summary:{{ $val.Annotations.summary }}
+  {{end -}}
+  {{if HasKey $val.Labels "cluster" -}} 
+  Cluster:{{ $val.Labels.cluster }}
+  {{end -}}
+  {{if HasKey $val.Labels "group" -}} 
+  Group:{{ $val.Labels.group }}
+  {{end -}}
+  {{if HasKey $val.Labels "instance" -}} 
+  Instance:{{ $val.Labels.instance }}
+  {{end -}}
+  {{if HasKey $val.Labels "queue" -}} 
+  Queue:{{ $val.Labels.queue }}
+  {{end -}}
   Active from: {{ $val.StartsAt | str_FormatDate }}
   {{ range $key, $value := $val.Annotations -}}
 {{- end -}}
